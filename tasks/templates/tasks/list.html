@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Задачи{% endblock %}
+
+{% block main_content %}
+  <h1>Текущие задачи</h1>
+    <ul class="list-inline">
+    {% for cat in categories %}
+      <li class="list-inline-item">
+        <span class="badge badge-info">{{ cat.name }}</span>
+      </li>
+    {% endfor %}
+    </ul>
+  <table  class="table">
+    <thead>
+      <tr>
+        <td>Задача</td>
+        <td>Категории</td>
+        <td>Приоритет</td>
+      </tr>
+    <thead>
+    <tbody>
+      {% for task in tasks %}
+        <tr>
+          <td>
+            <a href={% url "tasks:details" task.id %}>{{ task.description }}</a>
+          </td>
+          <td>
+            {% for cat in task.category.all %}
+              <li>{{  cat.slug  }}</li>
+            {% endfor %}
+          </td>
+          <td>
+            {% if task.priority.name == 'PRIORITY_HIGH' %}
+              <span class="badge badge-pill badge-danger">{{ task.priority.slug }}</span>
+            {% elif task.priority.name == 'PRIORITY_MEDIUM' %}
+              <span class="badge badge-pill badge-secondary">{{ task.priority.slug }}</span>
+            {% elif task.priority.name == 'PRIORITY_LOW' %}
+              <span class="badge badge-pill badge-success">{{ task.priority.slug }}</span>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    <tbody>
+  </table>
+{% endblock %}
